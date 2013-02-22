@@ -135,6 +135,37 @@ Example ex_notation_2: let combined := item >> (fail: Parser ascii) >> item in
   combined [["hello"]] = None.
 Proof. reflexivity. Qed. 
 
+(**
+And of course, the proof that the combination of [Parser T], [bind] and [result] 
+forms a Monad. 
+*)
+
+Lemma parser_monad_left_id: forall (T U: Type) (t: T) (f: T -> Parser U), 
+  (result t >>= f) = f t.
+Proof. reflexivity.  Qed.
+
+Lemma parser_monad_right_id: forall (T: Type) (m: Parser T) (inp: list ascii), 
+  (m >>= result) inp = m inp.
+Proof. 
+  intros T m inp. 
+  compute. 
+  destruct (m inp) as [p | None]. 
+  + destruct p; reflexivity. 
+  + reflexivity.
+Qed.
+
+Lemma parser_monad_assoc: forall (T U V: Type) p (f: T -> Parser U) (g: U -> Parser V) (inp: list ascii), 
+  ((p >>= f) >>= g) inp  = (p >>= (fun x => f x >>= g)) inp.
+Proof.
+  intros T U V p f g inp. 
+  compute.
+  destruct (p inp) as [s | None]. 
+  + destruct s; destruct (f t l) as [s' | None]. 
+    * destruct s'; reflexivity.
+    * reflexivity.   
+  + reflexivity. 
+Qed. 
+
 (** * Advanced Combinators 
 Armed with the bind operator, it is now possible to create more interesting
 parsers. The first one is the [sat] parser, which consumes a token from
