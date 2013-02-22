@@ -26,8 +26,10 @@ Proof. reflexivity. Qed.
 *)
 Module Notations.
 
+(** Less than or equal on ascii *)
 Notation "c1 <= c2" := (leb (nat_of_ascii c1) (nat_of_ascii c2)). 
 
+(** Converting a string to a list of characters *)
 Notation "[[ s ]]" := (str_list s). 
 
 End Notations.
