@@ -166,6 +166,14 @@ Proof.
   + reflexivity. 
 Qed. 
 
+(** 
+Note that [parser_monad_right_id] and [parser_monad_assoc] are not completely right; they only prove
+that the functions behave the same on any input. In order to proof equality of the functions, I would
+have to add the extensional equality axiom ([forall f g x, f x = g x -> f = g]), effectively resulting
+in the same proof. 
+*)
+
+
 (** * Advanced Combinators 
 Armed with the bind operator, it is now possible to create more interesting
 parsers. The first one is the [sat] parser, which consumes a token from
